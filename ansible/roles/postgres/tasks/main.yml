@@ -8,7 +8,7 @@
       - postgresql-contrib
       - python3-pip
       - libpq-dev
-      - python-ipaddress
+      - pypy-ipaddress
       update_cache: yes
 
   - name: upgrade setuptools
@@ -92,7 +92,7 @@
 
   - name: Grant priveleges
     postgresql_pg_hba:
-      dest: /etc/postgresql/12/main/pg_hba.conf
+      dest: /etc/postgresql/14/main/pg_hba.conf
       contype: local
       users: "{{ pg_user }}"
       databases: "{{ pg_db }}"
