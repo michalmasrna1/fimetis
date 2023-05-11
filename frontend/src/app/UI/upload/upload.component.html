@@ -87,7 +87,7 @@
                     <span class="glyphicon glyphicon-upload"></span> Upload all
                 </button>
         </div>
-        <div class="col-md-8 text-align-left">
+        <div class="col-md-4 text-align-left">
                 <span matTooltip="Removes lines that contains (deleted) from uploaded files" [matTooltipPosition]="'above'">
                     <input type="checkbox" [(ngModel)]="removeDeleted" class="fimetis-slider" id="removeDeletedCheckbox">
                     <label for="removeDeletedCheckbox" class="removeCheckbox"></label>
@@ -99,6 +99,40 @@
                     <label for="removeDeletedReallocCheckbox" class="removeCheckbox"></label>
                     Remove deleted realloc lines from files
                 </span>
+        </div>
+        <div class="col-md-4 text-align-left">
+            <span matTooltip="Creates a new cluster corresponding to files detected as likely connected to the investigation" [matTooltipPosition]="'above'">
+                <input type="checkbox" [(ngModel)]="performDetection" class="fimetis-slider" id="performDetectionCheckbox">
+                <label for="performDetectionCheckbox" class="removeCheckbox"></label>
+                Perform automatic detection
+            </span>
+            <br>
+            <span *ngIf="performDetection">
+                <b><mat-label>Select the model configuration:</mat-label></b>
+                <mat-radio-group [(ngModel)]="modelConfiguration">
+                    <br>
+                    <mat-radio-button
+                        value="1"
+                        matTooltip="The model will identify less entries overall, but it is less likely to identify the desired files.">
+                        Strict
+                    </mat-radio-button>
+                    <br>
+                    <mat-radio-button
+                        value="2"
+                        matTooltip="The model will be balanced between increasing the chance of identifying the desired files and identifying too many entries overall.">
+                        Normal
+                    </mat-radio-button>
+                    <br>
+                    <mat-radio-button
+                        value="3"
+                        matTooltip="The model will more likely identify the desired files, but it will also identify more false positives.">
+                        Lenient
+                    </mat-radio-button>
+                </mat-radio-group>
+            </span>
+            <span Else>
+                <br>
+            </span>
         </div>
 
         <div class="text-align-left">

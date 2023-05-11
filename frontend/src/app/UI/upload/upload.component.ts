@@ -32,6 +32,8 @@ export class UploadComponent implements OnInit {
     invalidComboDrag = false;
     removeDeleted = true;
     removeDeletedRealloc = true;
+    performDetection = true;
+    modelConfiguration = '2';
     cluster_ids = [];
     users = [];
     groups = [];
@@ -70,6 +72,8 @@ export class UploadComponent implements OnInit {
         formData.append('description', this._description);
         formData.append('removeDeleted', this.removeDeleted.toString());
         formData.append('removeDeletedRealloc', this.removeDeletedRealloc.toString());
+        formData.append('performDetection', this.performDetection.toString());
+        formData.append('modelConfiguration', this.modelConfiguration);
         formData.append('datasetExtend', this.datasetExtended().toString());
         formData.append('cluster_ids', JSON.stringify(this.cluster_ids));
         formData.append('full_access_ids', JSON.stringify(this.fullAccessIds));
