@@ -9,8 +9,13 @@ from elasticsearch import Elasticsearch
 from elasticsearch.exceptions import TransportError
 from elasticsearch.helpers import streaming_bulk
 # import chardet
+import postgres_lib as pg
 import logging
 import argparse
+
+from detection.detection import detect_outliers
+from detection.model import CONFIGURATIONS
+from detection.utils import path_to_regex
 
 # logging.basicConfig(format='%(asctime)s %(levelname)-8s %(name)s %(message)s', level=logging.INFO)
 
@@ -155,8 +160,8 @@ def mactime_stream(csv_file_path, case_name, remove_deleted=True, remove_deleted
                 pass
 
 
-def import_csv(csv_file_path, file_type, es_client, es_index, es_type, case_name, remove_deleted=True, remove_deleted_realloc=True,
-               delete_source=True):
+def import_csv(csv_file_path, file_type, es_client, es_index, es_type, case_name, remove_deleted=True,
+               remove_deleted_realloc=True, delete_source=True, perform_detection=False, model_configuration='1'):
     create_index(es_client, es_index, es_type)
     logging.info('Import file %s to case: %s' % (csv_file_path, case_name))
     if es_type is None:
@@ -166,6 +171,19 @@ def import_csv(csv_file_path, file_type, es_client, es_index, es_type, case_name
         stream = l2tcsv_stream
     else:
         stream = mactime_stream
+
+    if perform_detection:
+        configuration = CONFIGURATIONS[model_configuration]
+
+        # Get a list of directory and file names identified as suspicious
+        csv_stream = stream(csv_file_path, case_name, remove_deleted, remove_deleted_realloc)
+        suspicious_paths = detect_outliers(csv_stream, configuration)
+
+        # Create cluster corresponding to the detected files
+        cluster_name = f'Suspicious files for case {case_name}'
+        cluster_description = f'Files identified as likely to be connected to the investigation in case {case_name}'
+        cluster_definition = '|'.join([path_to_regex(path) for path in suspicious_paths])
+        pg.insert_cluster_definition(cluster_name, cluster_definition, cluster_description, 'Filename Regex')
 
     for ok, result in streaming_bulk(
             es_client,

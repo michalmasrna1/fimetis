@@ -232,7 +232,15 @@ def upload(current_user):
     else:
         remove_deleted_realloc = request.form['removeDeletedRealloc'] in ('true', '1')
 
+    if 'performDetection' not in request.form:
+        perform_detection = False
+    else:
+        perform_detection = request.form['performDetection'] in ('true', '1')
 
+    if 'modelConfiguration' not in request.form:
+        model_configuration = '1'
+    else:
+        model_configuration = request.form['modelConfiguration']
 
     if 'file' not in request.files:
         return jsonify({'status': 'failed', 'message': 'No file to upload'})
@@ -278,7 +286,9 @@ def upload(current_user):
                                        app.config['elastic_metadata_type'],
                                        case_name,
                                        remove_deleted=remove_deleted,
-                                       remove_deleted_realloc=remove_deleted_realloc)
+                                       remove_deleted_realloc=remove_deleted_realloc,
+                                       perform_detection=perform_detection,
+                                       model_configuration=model_configuration)
 
             if request.form['datasetExtend'] == 'false':
                 pg.insert_case(case_name, description)
