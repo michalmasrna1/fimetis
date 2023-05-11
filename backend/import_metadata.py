@@ -34,7 +34,15 @@ mappings =  {
       }
     },
     "GID": { "type": "long" },
-    "Meta": { "type": "long" },
+    "Meta": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 20
+        }
+      }
+    },
     "Mode": {
       "type": "text",
       "fields": {
@@ -108,7 +116,7 @@ def l2tcsv_stream(csv_file_path, case_name, remove_deleted=True, remove_deleted_
                 del line['time']
                 del line['timezone']
                 line['Type'] = line['MACB'].lower()
-                line['Meta'] = int(line['inode'])
+                line['Meta'] = line['inode']
                 line['Size'] = int(0)
                 line['UID'] = int(-1)
                 line['GID'] = int(-1)
@@ -146,7 +154,6 @@ def mactime_stream(csv_file_path, case_name, remove_deleted=True, remove_deleted
                 line['case'] = case_name
                 line['@timestamp'] = parser.parse(line['Date']).strftime('%Y-%m-%dT%H:%M:%S.000Z')
                 del line['Date']
-                line['Meta'] = int(line['Meta'])
                 line['Size'] = int(line['Size'])
                 line['UID'] = int(line['UID'])
                 line['GID'] = int(line['GID'])
