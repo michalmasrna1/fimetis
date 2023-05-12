@@ -11,7 +11,7 @@ kibana_localhost_port: 5601
 kibana_app_port: 8080
 
 # Angular UI app
-angular_app_port: 80
+angular_app_port: 8081
 
 # Backend flask api
 backend_port: 5001
