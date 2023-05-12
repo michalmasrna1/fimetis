@@ -8,7 +8,7 @@ elastic_heap_size: 2
 kibana_user: elastic
 kibana_passwd: timesix-elk
 kibana_localhost_port: 5601
-kibana_app_port: 8080
+kibana_app_port: 8090
 
 # Angular UI app
 angular_app_port: 8081
