@@ -1,0 +1,28 @@
+# Copas UI configuration
+
+# lets the UI know this is analytical Copas module, don't change this (there are other types in making)
+module:
+  type: app
+
+
+home:
+  title: Fimetis
+  description: The Fimetis tool enables the examination of file metadata (timestamps, ownership, etc.) and streamlines the processing of large volumes of such data.
+
+
+theme:
+  background:
+    image: background.svg
+
+
+analysis:
+  status: false
+  
+  
+help:
+  # General information about the module (the purpose, supported file formats, installed tools)
+  - name: General
+    path: ./public/help/general_info.md
+  # Description of Copas UI, this does not need to be updated
+  - name: Copas UI
+    path: ./public/help/copas_ui.md

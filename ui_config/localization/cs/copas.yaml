@@ -1,0 +1,12 @@
+home:
+  title: Fimetis
+  description: Nástroj Fimetis umožňuje prohlížení souborových metadat (časové razítko, vlastnictví atd.) a usnadňuje zpracování velkých objemů takových dat.
+
+analysis:
+  status: false
+
+help:
+  - name: Obecné
+    path: ./public/help/cs/general_info.md
+  - name: Rozhraní Copasu
+    path: ./public/help/cs/copas_ui.md
