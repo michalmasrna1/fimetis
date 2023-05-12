@@ -19,19 +19,6 @@
 
   - name: werkzeug
     shell: pip3 install werkzeug
- 
-  - name: Starting and setting running postgresql after boot
-    systemd:
-      name: postgresql
-      daemon_reload: yes
-      enabled: yes
-      state: started
-
-  - name: Create postgres user for fimetis
-    shell: sudo -u postgres createuser -s {{ pg_user }}
-
-  - name: Create database for fimetis
-    shell: sudo -u postgres createdb {{ pg_db }}
 
   - name: Create linux user for accessing postgres role in db
     shell: sudo adduser --disabled-password --gecos "" {{ pg_user }}
@@ -71,43 +58,8 @@
   - name: Chmod +x superamin.py
     shell: chmod +x /opt/backend/import_super_admin.py
 
-  - name: Init fimetis tables
-    shell: "sudo -u {{ pg_user }} psql {{ pg_user }} {{ pg_db }} -f init.sql"
-    args:
-      chdir: /tmp/
-
-  - name: Init filters
-    shell: "sudo -u {{ pg_user }} psql {{ pg_user }} {{ pg_db }} -f filter.sql"
-    args:
-      chdir: /tmp/
-
-  - name: Init clusters
-    shell: "sudo -u {{ pg_user }} psql {{ pg_user }} {{ pg_db }} -f cluster.sql"
-    args:
-      chdir: /tmp/
-
-
 #  - name: Cleaning used init database file
 #    shell: rm /tmp/init.sql
-
-  - name: Grant priveleges
-    postgresql_pg_hba:
-      dest: /etc/postgresql/14/main/pg_hba.conf
-      contype: local
-      users: "{{ pg_user }}"
-      databases: "{{ pg_db }}"
-      method: trust
-      create: true
-
-  - name: Restarting postgresql 
-    service:
-      name: postgresql
-      state: restarted
-   
-  - name: Importing super admin user to database
-    shell: "source /opt/backend/venv/bin/activate && /opt/backend/import_super_admin.py --user {{ super_admin_login }} --passwd {{ super_admin_passwd }}"
-    args:
-      executable: /bin/bash
  
 #  - name: Move generate hash to tmp
 #    copy:

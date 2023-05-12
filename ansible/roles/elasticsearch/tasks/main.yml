@@ -71,24 +71,6 @@
       path: /etc/elasticsearch/elasticsearch.yml
       line: indices.query.bool.max_clause_count{{':'}} 500000
 
-  - name: Starting and setting running elastic after boot 
-    systemd:
-      name: elasticsearch
-      daemon_reload: yes
-      enabled: yes
-      state: started
-
-  - name: Waiting for elastic is ready
-    wait_for:
-      host: localhost
-      port: "{{ elastic_localhost_port }}"
-      delay: 10
-
-  - name: Setting size of maximal result from elastic with curl
-    shell: 'curl -XPUT ''localhost:{{ elastic_localhost_port }}/_all/_settings?preserve_existing=true'' -H ''Content-Type: application/json'' -d ''{"index.max_result_window" : "20000000"}'''
-    args:
-      warn: false 
-
   - name: Setting elastic min heapsize
     lineinfile:
       path: /etc/elasticsearch/jvm.options
@@ -100,11 +82,3 @@
       path: /etc/elasticsearch/jvm.options
       regexp: "^-Xmx.*"
       line: "-Xmx{{ elastic_heap_size }}g"
-
-
-  - name: Reloading elastic
-    systemd:
-      name: elasticsearch
-      daemon_reload: yes
-      state: restarted
-
