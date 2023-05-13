@@ -73,7 +73,7 @@ def create_index(client, index, es_type):
       'settings': {
         # 'number_of_shards': 1,
         'max_result_window': 20000000,
-        'max_regex_length': 1000000,
+        'max_regex_length': 65536,
       },
       'mappings': {
         es_type: mappings,

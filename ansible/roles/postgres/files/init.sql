@@ -57,7 +57,7 @@ CREATE TABLE "cluster" (
   id int NOT NULL PRIMARY KEY default nextval('cluster_id_seq'),
   name varchar(128) NOT NULL,
   filter_id int REFERENCES "filter"(id),
-  definition varchar(2048) NOT NULL,
+  definition varchar(65536) NOT NULL,
   description varchar(2048)
 );
 
