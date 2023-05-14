@@ -16,6 +16,12 @@ RUN cp -r /copas-fimetis/ui_config/* /etc/copas
 
 RUN ansible-playbook /copas-fimetis/ansible/fs_analysis-playbook.yml
 
+# Add the required line to the start of the file
+RUN cp /etc/postgresql/14/main/pg_hba.conf /etc/postgresql/14/main/pg_hba.conf.tmp \
+    && echo "local fimetis fimetis trust" > /etc/postgresql/14/main/pg_hba.conf \
+    && cat /etc/postgresql/14/main/pg_hba.conf.tmp >> /etc/postgresql/14/main/pg_hba.conf \
+    && rm /etc/postgresql/14/main/pg_hba.conf.tmp
+
 LABEL copas.module.description="The Fimetis tool enables the examination of file system metadata." \
     copas.module.author.name="Michal Masrna" \
     copas.module.author.email="514084@muni.cz" \
